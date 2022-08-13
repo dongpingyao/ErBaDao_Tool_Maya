@@ -1523,8 +1523,11 @@ class EbdToolsMaya(MayaQWidgetBaseMixin, QtWidgets.QMainWindow):
         else:
             os.makedirs(filePath)
 
-        if os.path.exists(fileName):
-            os.remove(fileName)
+        if os.path.exists(fileName) or os.path.exists(fileName2):
+            try:
+                os.remove(fileName)
+            except:
+                os.remove(fileName2)
             self.widget.EbdLog_Browser.append("正在下载中,请稍等")
             self.widget.EbdLog_Browser.ensureCursorVisible()
             wget.download(url, filePath)
