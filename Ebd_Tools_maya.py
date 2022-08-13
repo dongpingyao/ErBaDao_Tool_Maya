@@ -1510,9 +1510,13 @@ class EbdToolsMaya(MayaQWidgetBaseMixin, QtWidgets.QMainWindow):
         for i in sys.path:
             if "ErBaDao_Tool_Maya" in i:
                 scriptPath = i.split(r'ErBaDao_Tool_Maya')[0]
-        url = "http://182.92.66.60:45015/down/aV9E2zTCj2oS?fname=/ErBaDao_Tool_Maya.zip"
+        try:
+            url = "https://codeload.github.com/dongpingyao/Ebd_Tools_Maya/zip/refs/heads/main"
+        except:
+            url = "http://182.92.66.60:45015/down/aV9E2zTCj2oS?fname=/ErBaDao_Tool_Maya.zip"
         filePath = scriptPath + "ebdTemp"
         fileName = filePath + r'/ErBaDao_Tool_Maya.zip'
+        fileName2 = filePath + r'/Ebd_Tools_Maya-main.zip'
         tarfile = scriptPath
         if os.path.exists(filePath):
             pass
@@ -1535,9 +1539,17 @@ class EbdToolsMaya(MayaQWidgetBaseMixin, QtWidgets.QMainWindow):
 
         if os.path.exists(scriptPath + r"/ErBaDao_Tool_Maya"):
             shutil.rmtree(scriptPath + r"/ErBaDao_Tool_Maya", ignore_errors=1)
-            zip = zipfile.ZipFile(fileName)
+
+            try:
+                zip = zipfile.ZipFile(fileName)
+            except:
+                zip = zipfile.ZipFile(fileName2)
             zip.extractall(scriptPath + "ebdTemp")
             zip.close()
+
+            if os.path.exists(scriptPath + "ebdTemp/Ebd_Tools_Maya-main"):
+                os.rename(scriptPath + "ebdTemp/ErBaDao_Tool_Maya",scriptPath + "ebdTemp/ErBaDao_Tool_Maya")
+
             for root, dirs, files in os.walk(scriptPath + "ebdTemp" + r"/ErBaDao_Tool_Maya"):
                 for file in files:
                     src_file = os.path.join(root, file).replace('\\', '/')
