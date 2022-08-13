@@ -1,0 +1,15 @@
+list of license of dependencies.
+
+- pathlib2          Matthias C. M. Troffaes, MIT License
+- contextlib2       Nick Coghlan, PSF License
+
+- backports.lzma    Peter J. A. Cock, 3-clause BSDL
+- zstandard         Gregory Szorc, 3-clause BSDL
+- pyzstd            Ma Lin, 3-clause BSDL
+- pyppmd            Hiroshi Miura, LGPL 2.1+
+- inflate64         Hiroshi Miura, LGPL 2.1+
+- zipfile_deflate64 Brian Helba, Apache License 2.0
+- isal              Leiden University Medical Center, MIT License
+- slz               T. Yamada, MIT License
+- dclimplode        T. Yamada, MIT License
+- codecs7z          T. Yamada, LGPL 2.1+
