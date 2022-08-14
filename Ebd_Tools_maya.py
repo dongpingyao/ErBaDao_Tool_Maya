@@ -1517,14 +1517,14 @@ class EbdToolsMaya(MayaQWidgetBaseMixin, QtWidgets.QMainWindow):
         if os.path.exists(filePath):
             self.widget.EbdLog_Browser.append("正在下载中,请稍等")
             self.widget.EbdLog_Browser.ensureCursorVisible()
-            time.sleep(1)
+            time.sleep(5)
             wget.download(url, filePath)
             self.widget.EbdLog_Browser.append("下载完成,准备更新")
             self.widget.EbdLog_Browser.ensureCursorVisible()
         else:
             self.widget.EbdLog_Browser.append("正在下载中,请稍等")
             self.widget.EbdLog_Browser.ensureCursorVisible()
-            time.sleep(1)
+            time.sleep(5)
             wget.download(url, filePath)
             self.widget.EbdLog_Browser.append("下载完成,准备更新")
             self.widget.EbdLog_Browser.ensureCursorVisible()
