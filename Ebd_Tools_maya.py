@@ -1519,15 +1519,12 @@ class EbdToolsMaya(MayaQWidgetBaseMixin, QtWidgets.QMainWindow):
         fileName2 = filePath + r'/Ebd_Tools_Maya-main.zip'
         tarfile = scriptPath
         if os.path.exists(filePath):
-            pass
+            shutil.rmtree(filePath)
+            os.makedirs(filePath)
         else:
             os.makedirs(filePath)
 
-        if os.path.exists(fileName) or os.path.exists(fileName2):
-            try:
-                os.remove(fileName)
-            except:
-                os.remove(fileName2)
+        if os.path.exists(filePath):
             self.widget.EbdLog_Browser.append("正在下载中,请稍等")
             self.widget.EbdLog_Browser.ensureCursorVisible()
             wget.download(url, filePath)
