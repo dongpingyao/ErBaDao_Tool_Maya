@@ -45,17 +45,6 @@ class EbdToolsMaya(MayaQWidgetBaseMixin, QtWidgets.QMainWindow):
         self.create_connections()
         self.setFileIcon()
 
-    #创建右键菜单 并绑定
-        # 具体菜单项
-        # self.widget.EbdLog_Browser.customContextMenuRequested.connect(self.gaga)
-        #
-        # self.popMenu = QMenu(self)
-        # self.popMenu.addAction(QAction('test0', self))
-        # self.popMenu.addAction(QAction('test1', self))
-        # self.popMenu.addSeparator()
-        # self.popMenu.addAction(QAction('test2', self))
-
-
 
 
     # u 绑定按钮
