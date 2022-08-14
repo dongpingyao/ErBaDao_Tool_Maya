@@ -1514,20 +1514,12 @@ class EbdToolsMaya(MayaQWidgetBaseMixin, QtWidgets.QMainWindow):
         else:
             os.makedirs(filePath)
 
-        if os.path.exists(filePath):
-            self.widget.EbdLog_Browser.append("正在下载中,请稍等")
-            self.widget.EbdLog_Browser.ensureCursorVisible()
-            time.sleep(5)
-            wget.download(url, filePath)
-            self.widget.EbdLog_Browser.append("下载完成,准备更新")
-            self.widget.EbdLog_Browser.ensureCursorVisible()
-        else:
-            self.widget.EbdLog_Browser.append("正在下载中,请稍等")
-            self.widget.EbdLog_Browser.ensureCursorVisible()
-            time.sleep(5)
-            wget.download(url, filePath)
-            self.widget.EbdLog_Browser.append("下载完成,准备更新")
-            self.widget.EbdLog_Browser.ensureCursorVisible()
+        self.widget.EbdLog_Browser.append("正在下载中,请稍等...")
+        self.widget.EbdLog_Browser.ensureCursorVisible()
+        wget.download(url, filePath)
+        self.widget.EbdLog_Browser.append("下载完成,准备更新")
+        self.widget.EbdLog_Browser.ensureCursorVisible()
+
 
         if os.path.exists(scriptPath + r"/ErBaDao_Tool_Maya"):
             shutil.rmtree(scriptPath + r"/ErBaDao_Tool_Maya", ignore_errors=1)
@@ -1554,8 +1546,6 @@ class EbdToolsMaya(MayaQWidgetBaseMixin, QtWidgets.QMainWindow):
                     try:
                         shutil.copy(src_file, target_path)
                     except:
-                        self.widget.EbdLog_Browser.append(src_file)
-                        self.widget.EbdLog_Browser.append("没有完美拷贝,如果程序不能正常运行请手动拷贝更新")
                         pass
 
             self.widget.EbdLog_Browser.append("更新完成")
