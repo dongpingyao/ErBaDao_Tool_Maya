@@ -1,5 +1,6 @@
-1.将ErBaDao_Tool_Maya 文件夹 复制到 maya 相关的scripts等脚本文件夹
-2.将Launcher.py 文件在maya的脚本编辑器中打开 运行即可
+1.将解压后 Ebd_Tools_Maya-main 的文件夹重命名为 ErBaDao_Tool_Maya
+2.将ErBaDao_Tool_Maya 文件夹 复制到 maya 相关的scripts等脚本文件夹
+3.将Launcher.py 文件在maya的脚本编辑器中打开 运行即可
 
 Ebd_Tools_maya_BetaV22.08.14 更新 
 
