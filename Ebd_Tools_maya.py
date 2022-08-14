@@ -1513,11 +1513,11 @@ class EbdToolsMaya(MayaQWidgetBaseMixin, QtWidgets.QMainWindow):
             os.makedirs(filePath)
         else:
             os.makedirs(filePath)
-        print("正在下载中,请稍等...")
+        print(u"正在下载中,请稍等...")
         self.widget.EbdLog_Browser.append("正在下载中,请稍等...")
         self.widget.EbdLog_Browser.ensureCursorVisible()
         wget.download(url, filePath)
-        print("下载完成,准备更新")
+        print(u"下载完成,准备更新")
         self.widget.EbdLog_Browser.append("下载完成,准备更新")
         self.widget.EbdLog_Browser.ensureCursorVisible()
 
@@ -1548,8 +1548,8 @@ class EbdToolsMaya(MayaQWidgetBaseMixin, QtWidgets.QMainWindow):
                         shutil.copy(src_file, target_path)
                     except:
                         pass
-            print("更新完成")
-            self.widget.EbdLog_Browser.append("更新完成")
+            print(u"更新完成")
+            self.widget.EbdLog_Browser.append(u"更新完成")
             self.widget.EbdLog_Browser.ensureCursorVisible()
 
     # 跳转到主页
