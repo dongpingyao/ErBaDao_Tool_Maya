@@ -43,7 +43,7 @@
         </size>
        </property>
        <property name="currentIndex">
-        <number>1</number>
+        <number>4</number>
        </property>
        <widget class="QWidget" name="Layout_2">
         <attribute name="title">
@@ -2043,7 +2043,7 @@
         <attribute name="title">
          <string>帮助</string>
         </attribute>
-        <layout class="QHBoxLayout" name="horizontalLayout_36">
+        <layout class="QVBoxLayout" name="verticalLayout_27">
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_33">
            <item>
@@ -2261,6 +2261,9 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;关于此工具&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;下载地址1:&lt;span style=&quot; font-family:'Consolas','monospace'; font-size:9.8pt; color:#a5c261;&quot;&gt;https://codeload.github.com/dongpingyao/Ebd_Tools_Maya/zip/refs/heads/main&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;下载地址2:&lt;span style=&quot; font-family:'Consolas,monospace'; font-size:9.8pt; color:#a5c261;&quot;&gt;http://182.92.66.60:45015/down/aV9E2zTCj2oS?fname=/ErBaDao_Tool_Maya.zip&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Consolas,monospace'; font-size:9.8pt; color:#a5c261;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;22.08.14&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;1.将下载源迁移到了gitup,虽然下载速度会受限,但是不用自己的服务器会省去一笔开销.&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;22.08.08&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;1.添加了在线更新功能呢&lt;/p&gt;
