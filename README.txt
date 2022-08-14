@@ -1,7 +1,13 @@
 1.将ErBaDao_Tool_Maya 文件夹 复制到 maya 相关的scripts等脚本文件夹
 2.将Launcher.py 文件在maya的脚本编辑器中打开 运行即可
 
-Ebd_Tools_maya_betaV214 更新 
+Ebd_Tools_maya_BetaV22.08.14 更新 
+
+更新22.08.14
+1,将下载源迁移到了githup,虽然下载速度受限,但省去了服务器的费用
+2,添加了在线更新的功能
+3,添加了 选取udim/非Arms材质球/类似udim贴图的功能(采取了udim命名的方式但是未使用udim序列的贴图)
+4,完善了插件的log显示功能
 
 更新
 1,增加了贴图路径的 打开对话框
