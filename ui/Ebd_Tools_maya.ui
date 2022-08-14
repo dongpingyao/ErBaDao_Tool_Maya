@@ -43,7 +43,7 @@
         </size>
        </property>
        <property name="currentIndex">
-        <number>4</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="Layout_2">
         <attribute name="title">
@@ -1057,8 +1057,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>186</width>
-              <height>53</height>
+              <width>361</width>
+              <height>164</height>
              </rect>
             </property>
             <attribute name="label">
@@ -2275,11 +2275,6 @@ p, li { white-space: pre-wrap; }
           </layout>
          </item>
         </layout>
-       </widget>
-       <widget class="QWidget" name="tab_3">
-        <attribute name="title">
-         <string>页</string>
-        </attribute>
        </widget>
       </widget>
      </item>
