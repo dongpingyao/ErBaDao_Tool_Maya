@@ -30,14 +30,11 @@ elif ErBaDao_Tool_Maya == 'False':
             UIFile = i + r"/ErBaDao_Tool_Maya/ui/Ebd_Tools_maya.ui"
         else:
             pass
-import cv2
-import numpy as np
 import maya.cmds as cmds
 import zipfile
 import wget
 import cv2CvtFormat
 import cv2SplitAndMergeChanel as cv2ARMS
-import time
 
 
 class EbdToolsMaya(MayaQWidgetBaseMixin, QtWidgets.QMainWindow):
