@@ -33,20 +33,20 @@ def mergeRGBA(imgR, imgG, imgB, imgA, imgRGBA):
     cv2.imwrite(imgRGBA,rgba_chanel)
 
 
-# def splitRGBA(imgRGBA, imgR, imgG, imgB,imgA):
-#     img = cv2.imread(imgRGBA, cv2.IMREAD_UNCHANGED)
-#     rgba_chanel = cv2.split(img)
-#     b_chanel = rgba_chanel[0]
-#     g_chanel = rgba_chanel[1]
-#     r_chanel = rgba_chanel[2]
-#     if img.shape[-1] == 3L:
-#         chanelNum = 3
-#         pass
-#     else:
-#         chanelNum = 4
-#         a_chanel = rgba_chanel[3]
-#         cv2.imwrite(imgA, a_chanel)
-#     cv2.imwrite(imgR, r_chanel)
-#     cv2.imwrite(imgG, g_chanel)
-#     cv2.imwrite(imgB, b_chanel)
+def splitRGBA(imgRGBA, imgR, imgG, imgB,imgA):
+    img = cv2.imread(imgRGBA, cv2.IMREAD_UNCHANGED)
+    rgba_chanel = cv2.split(img)
+    b_chanel = rgba_chanel[0]
+    g_chanel = rgba_chanel[1]
+    r_chanel = rgba_chanel[2]
+    if img.shape[-1] == "3L":
+        chanelNum = 3
+        pass
+    else:
+        chanelNum = 4
+        a_chanel = rgba_chanel[3]
+        cv2.imwrite(imgA, a_chanel)
+    cv2.imwrite(imgR, r_chanel)
+    cv2.imwrite(imgG, g_chanel)
+    cv2.imwrite(imgB, b_chanel)
 
