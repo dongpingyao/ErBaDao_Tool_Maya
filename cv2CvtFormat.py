@@ -31,7 +31,7 @@ def ConverterFormat(imgPath,imgFormat):
         elif imgZeroDeph == np.uint8:
             imgZero = np.clip((img * 255),0,255).astype(np.uint8)
         else:
-            print imgPath + '：的通道异常，请手动处理'
+            print imgPath + u'：的通道异常，请手动处理'
             pass
     if img.dtype == 'uint16':
         if imgZeroDeph == np.float32:
@@ -41,7 +41,7 @@ def ConverterFormat(imgPath,imgFormat):
         elif imgZeroDeph == np.uint8:
             imgZero = np.clip((img / 255), 0, 255).astype(np.uint8)
         else:
-            cmds.warning( imgPath + '：的通道异常，请手动处理')
+            cmds.warning( imgPath + u'：的通道异常，请手动处理')
             pass
     if img.dtype == 'uint8':
         if imgZeroDeph == np.float32:
@@ -51,7 +51,7 @@ def ConverterFormat(imgPath,imgFormat):
         elif imgZeroDeph == np.uint8:
             imgZero = img
         else:
-            cmds.warning( imgPath + '：的通道异常，请手动处理')
+            cmds.warning( imgPath + u'：的通道异常，请手动处理')
             pass
     #判断用户输入的是16位图吗
     if '16' in imgFormat:
