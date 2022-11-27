@@ -14,7 +14,7 @@ def mergeImageOpacity(img, imgOpacity, imgFormat):
     img = cv2.merge((b_chanel,g_chanel,r_chanel,alpha_chanel))
     cv2.imwrite(imgPath+'.'+ imgFormat,img)
 
-# imgPath = r"E:\WORK\PycharmProjects\ErBaDao_Tool_Maya\images\xxx.jpg"
+# imgPath = r"E:\WORK\PycharmProjects\Ebd_Tools_Maya\images\xxx.jpg"
 #imgFormat = 'jpg'or 'png' or 'exr'...
 #支持的格式有 exr,hdr,pbm,pxm,pam,jpg,png,webp
 def ConverterFormat(imgPath,imgFormat):

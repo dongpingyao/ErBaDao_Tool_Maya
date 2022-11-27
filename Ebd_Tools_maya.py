@@ -14,20 +14,20 @@ from PySide2 import QtGui
 from PySide2.QtUiTools import QUiLoader
 from maya.app.general.mayaMixin import MayaQWidgetBaseMixin
 
-ErBaDao_Tool_Maya = 'False'
+Ebd_Tools_Maya = 'False'
 for i in sys.path:
-    if i.split('/')[-1] == 'ErBaDao_Tool_Maya' or i.split('\\')[-1] == 'ErBaDao_Tool_Maya':
-        ErBaDao_Tool_Maya = 'True'
+    if i.split('/')[-1] == 'Ebd_Tools_Maya' or i.split('\\')[-1] == 'Ebd_Tools_Maya':
+        Ebd_Tools_Maya = 'True'
         UIFile = i + "/ui/Ebd_Tools_maya.ui"
         pass
-if ErBaDao_Tool_Maya == 'True':
+if Ebd_Tools_Maya == 'True':
     pass
-elif ErBaDao_Tool_Maya == 'False':
+elif Ebd_Tools_Maya == 'False':
     for i in sys.path:
-        if os.path.exists(i + r"/ErBaDao_Tool_Maya"):
-            sys.path.append(i + r"/ErBaDao_Tool_Maya")
-            sys.path.append(i + r"/ErBaDao_Tool_Maya/Lib/site_packages")
-            UIFile = i + r"/ErBaDao_Tool_Maya/ui/Ebd_Tools_maya.ui"
+        if os.path.exists(i + r"/Ebd_Tools_Maya"):
+            sys.path.append(i + r"/Ebd_Tools_Maya")
+            sys.path.append(i + r"/Ebd_Tools_Maya/Lib/site_packages")
+            UIFile = i + r"/Ebd_Tools_Maya/ui/Ebd_Tools_maya.ui"
         else:
             pass
 import maya.cmds as cmds
@@ -839,13 +839,23 @@ class EbdToolsMaya(MayaQWidgetBaseMixin, QtWidgets.QMainWindow):
         # 列出选择物体
         sele = cmds.ls(sl=True)
 
-        # 创建redshift材质球
-        cmds.shadingNode('RedshiftMaterial', asShader=True, name=shaderName)
-        cmds.sets(renderable=True, noSurfaceShader=True, empty=True, name=shaderName + 'SG')
-        cmds.setAttr(shaderName + '.refl_brdf', 1)
-        cmds.setAttr(shaderName + '.refl_fresnel_mode', 2)
-        if emissionIsCheck:
-            cmds.setAttr(shaderName + '.emission_weight', 1)
+        if matModel == 'RsMaterial':
+
+            # 创建redshift材质球
+            cmds.shadingNode('RedshiftMaterial', asShader=True, name=shaderName)
+            cmds.sets(renderable=True, noSurfaceShader=True, empty=True, name=shaderName + 'SG')
+            cmds.setAttr(shaderName + '.refl_brdf', 1)
+            cmds.setAttr(shaderName + '.refl_fresnel_mode', 2)
+            if emissionIsCheck:
+                cmds.setAttr(shaderName + '.emission_weight', 1)
+        elif matModel == 'usdPreviewSurface':
+            #创建usdPreviewSurface材质球
+            cmds.shadingNode('RedshiftMaterial', asShader=True, name=shaderName)
+            cmds.sets(renderable=True, noSurfaceShader=True, empty=True, name=shaderName + 'SG')
+            cmds.setAttr(shaderName + '.refl_brdf', 1)
+            cmds.setAttr(shaderName + '.refl_fresnel_mode', 2)
+            if emissionIsCheck:
+                cmds.setAttr(shaderName + '.emission_weight', 1)
 
         # # 创建ARMS_file or roughness_file and metlicc_file
         if texModel == 'PBR_ARMS':
@@ -1498,14 +1508,14 @@ class EbdToolsMaya(MayaQWidgetBaseMixin, QtWidgets.QMainWindow):
     # 更新控件
     def Upadate(self):
         for i in sys.path:
-            if "ErBaDao_Tool_Maya" in i:
-                scriptPath = i.split(r'ErBaDao_Tool_Maya')[0]
+            if "Ebd_Tools_Maya" in i:
+                scriptPath = i.split(r'Ebd_Tools_Maya')[0]
         try:
             url = "https://codeload.github.com/dongpingyao/Ebd_Tools_Maya/zip/refs/heads/main"
         except:
             url = "http://182.92.66.60:45015/down/aV9E2zTCj2oS?fname=/ErBaDao_Tool_Maya.zip"
         filePath = scriptPath + "ebdTemp"
-        fileName = filePath + r'/ErBaDao_Tool_Maya.zip'
+        fileName = filePath + r'/Ebd_Tools_Maya.zip'
         fileName2 = filePath + r'/Ebd_Tools_Maya-main.zip'
         tarfile = scriptPath
         if os.path.exists(filePath):
@@ -1522,8 +1532,8 @@ class EbdToolsMaya(MayaQWidgetBaseMixin, QtWidgets.QMainWindow):
         self.widget.EbdLog_Browser.ensureCursorVisible()
 
 
-        if os.path.exists(scriptPath + r"/ErBaDao_Tool_Maya"):
-            shutil.rmtree(scriptPath + r"/ErBaDao_Tool_Maya", ignore_errors=1)
+        if os.path.exists(scriptPath + r"/Ebd_Tools_Maya"):
+            shutil.rmtree(scriptPath + r"/Ebd_Tools_Maya", ignore_errors=1)
 
             try:
                 zip = zipfile.ZipFile(fileName)
@@ -1533,9 +1543,9 @@ class EbdToolsMaya(MayaQWidgetBaseMixin, QtWidgets.QMainWindow):
             zip.close()
 
             if os.path.exists(scriptPath + "ebdTemp/Ebd_Tools_Maya-main"):
-                os.rename(scriptPath + "ebdTemp/Ebd_Tools_Maya-main",scriptPath + "ebdTemp/ErBaDao_Tool_Maya")
+                os.rename(scriptPath + "ebdTemp/Ebd_Tools_Maya-main",scriptPath + "ebdTemp/Ebd_Tools_Maya")
 
-            for root, dirs, files in os.walk(scriptPath + "ebdTemp" + r"/ErBaDao_Tool_Maya"):
+            for root, dirs, files in os.walk(scriptPath + "ebdTemp" + r"/Ebd_Tools_Maya"):
                 for file in files:
                     src_file = os.path.join(root, file).replace('\\', '/')
                     ls = src_file.split(src_file.split("/")[-1])[0][:-1]
