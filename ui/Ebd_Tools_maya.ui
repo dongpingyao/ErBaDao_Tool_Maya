@@ -905,11 +905,6 @@
                            <string>RsMaterial</string>
                           </property>
                          </item>
-                         <item>
-                          <property name="text">
-                           <string>usdPreviewSurface</string>
-                          </property>
-                         </item>
                         </widget>
                        </item>
                       </layout>
@@ -1062,8 +1057,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>186</width>
-              <height>53</height>
+              <width>361</width>
+              <height>164</height>
              </rect>
             </property>
             <attribute name="label">

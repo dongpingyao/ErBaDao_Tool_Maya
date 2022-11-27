@@ -1,7 +1,7 @@
 try:
     reload(ebd)
 except:
-    import Ebd_Tools_maya.Ebd_Tools_maya as ebd
+    import ErBaDao_Tool_Maya.Ebd_Tools_maya as ebd
 if __name__ == "__main__":
     try:
         designer_ui.close()
