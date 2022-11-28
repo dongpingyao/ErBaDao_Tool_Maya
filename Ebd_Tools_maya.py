@@ -839,15 +839,21 @@ class EbdToolsMaya(MayaQWidgetBaseMixin, QtWidgets.QMainWindow):
         # 列出选择物体
         sele = cmds.ls(sl=True)
 
-        # 创建redshift材质球
-        cmds.shadingNode('RedshiftMaterial', asShader=True, name=shaderName)
-        cmds.sets(renderable=True, noSurfaceShader=True, empty=True, name=shaderName + 'SG')
-        cmds.setAttr(shaderName + '.refl_brdf', 1)
-        cmds.setAttr(shaderName + '.refl_fresnel_mode', 2)
-        if emissionIsCheck:
-            cmds.setAttr(shaderName + '.emission_weight', 1)
+        if matModel == "RsMaterial":
+            # 创建redshift材质球
+            cmds.shadingNode('RedshiftMaterial', asShader=True, name=shaderName)
+            cmds.sets(renderable=True, noSurfaceShader=True, empty=True, name=shaderName + 'SG')
+            cmds.setAttr(shaderName + '.refl_brdf', 1)
+            cmds.setAttr(shaderName + '.refl_fresnel_mode', 2)
+            if emissionIsCheck:
+                cmds.setAttr(shaderName + '.emission_weight', 1)
+        elif matModel == "usdPreviewSurface":
+            #创建usd材质球
+            cmds.shadingNode('usdPreviewSurface', asShader=True, name=shaderName)
+            cmds.sets(renderable=True, noSurfaceShader=True, empty=True, name=shaderName + 'SG')
 
-        # # 创建ARMS_file or roughness_file and metlicc_file
+
+        # 创建ARMS_file or roughness_file and metlicc_file
         if texModel == 'PBR_ARMS':
             cmds.shadingNode('file', asTexture=True, isColorManaged=True, name=ARMSName, )
             cmds.setAttr(ARMSName + '.fileTextureName', fileTexPath + '/' + ARMSName + udimNum + Format, type="string")
@@ -881,19 +887,25 @@ class EbdToolsMaya(MayaQWidgetBaseMixin, QtWidgets.QMainWindow):
         if udimIsCheck:
             cmds.setAttr(BaseColorName + '.uvTilingMode', 3)
 
+        if matModel == "RsMaterial":
         #创建normal文件
-        cmds.shadingNode('RedshiftBumpMap', asTexture=True, isColorManaged=True, name=BumpName, )
-        cmds.setAttr(BumpName + ".inputType", 1)
-        cmds.setAttr(BumpName + ".scale", 1)
-        cmds.setAttr(BumpName + ".flipY", 1)
+            cmds.shadingNode('RedshiftBumpMap', asTexture=True, isColorManaged=True, name=BumpName, )
+            cmds.setAttr(BumpName + ".inputType", 1)
+            cmds.setAttr(BumpName + ".scale", 1)
+            cmds.setAttr(BumpName + ".flipY", 1)
 
-        cmds.shadingNode('file', asTexture=True, isColorManaged=True, name=BumpTxName, )
-        cmds.setAttr(BumpTxName + '.fileTextureName', fileTexPath + '/' + BumpTxName + udimNum + Format, type="string")
-        cmds.setAttr(BumpTxName + '.ignoreColorSpaceFileRules', 1)
-        cmds.setAttr(BumpTxName + '.colorSpace', 'Raw', type='string')
-        if udimIsCheck:
-            cmds.setAttr(BumpTxName + '.uvTilingMode', 3)
-
+            cmds.shadingNode('file', asTexture=True, isColorManaged=True, name=BumpTxName, )
+            cmds.setAttr(BumpTxName + '.fileTextureName', fileTexPath + '/' + BumpTxName + udimNum + Format, type="string")
+            cmds.setAttr(BumpTxName + '.ignoreColorSpaceFileRules', 1)
+            cmds.setAttr(BumpTxName + '.colorSpace', 'Raw', type='string')
+            if udimIsCheck:
+                cmds.setAttr(BumpTxName + '.uvTilingMode', 3)
+        if matModel == "RsMaterial":
+            cmds.shadingNode('file', asTexture=True, isColorManaged=True, name=BumpTxName, )
+            cmds.setAttr(BumpTxName + '.fileTextureName', fileTexPath + '/' + BumpTxName + udimNum + Format,
+                         type="string")
+            cmds.setAttr(BumpTxName + '.ignoreColorSpaceFileRules', 1)
+            cmds.setAttr(BumpTxName + '.colorSpace', 'Raw', type='string')
         # #
         # 创建 opacity
         if opacityIsCheck :
@@ -993,6 +1005,8 @@ class EbdToolsMaya(MayaQWidgetBaseMixin, QtWidgets.QMainWindow):
                     cmds.setAttr(e + '.rsEnableDisplacement',1)
         cmds.select(sele)
         cmds.sets(forceElement=shaderName + 'SG')
+
+        '''
 
     # Ao/roughness/matellic/Opacity 通道拆分hebing
     def MergeRGBA(self):
@@ -1556,3 +1570,5 @@ class EbdToolsMaya(MayaQWidgetBaseMixin, QtWidgets.QMainWindow):
     @staticmethod
     def GoHome():
         web.open('http://blog.sina.com.cn/s/articlelist_2112442711_0_1.html')
+
+#测试

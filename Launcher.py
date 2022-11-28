@@ -1,5 +1,9 @@
 try:
-    reload(ebd)
+    try:
+        reload(ebd)
+    except:
+        import imp
+        imp.reload(ebd)
 except:
     import ErBaDao_Tool_Maya.Ebd_Tools_maya as ebd
 if __name__ == "__main__":

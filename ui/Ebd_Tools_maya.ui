@@ -304,8 +304,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>340</width>
-              <height>265</height>
+              <width>261</width>
+              <height>195</height>
              </rect>
             </property>
             <attribute name="label">
@@ -905,6 +905,11 @@
                            <string>RsMaterial</string>
                           </property>
                          </item>
+                         <item>
+                          <property name="text">
+                           <string>usdPreviewSurface</string>
+                          </property>
+                         </item>
                         </widget>
                        </item>
                       </layout>
@@ -1057,8 +1062,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>361</width>
-              <height>164</height>
+              <width>186</width>
+              <height>53</height>
              </rect>
             </property>
             <attribute name="label">
@@ -2382,11 +2387,11 @@ p, li { white-space: pre-wrap; }
   </connection>
  </connections>
  <buttongroups>
-  <buttongroup name="CopyReplace_buttonGroup"/>
   <buttongroup name="InstancReplace_buttonGroup">
    <property name="exclusive">
     <bool>true</bool>
    </property>
   </buttongroup>
+  <buttongroup name="CopyReplace_buttonGroup"/>
  </buttongroups>
 </ui>

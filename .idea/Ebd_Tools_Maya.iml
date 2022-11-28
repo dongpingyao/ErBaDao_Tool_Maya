@@ -3,7 +3,7 @@
   <component name="NewModuleRootManager">
     <content url="file://C:/Program Files/Autodesk/Maya2017/devkit/other/pymel/extras/completion/py" />
     <content url="file://$MODULE_DIR$" />
-    <orderEntry type="jdk" jdkName="Maya Python 2.7 (Ebd_Tools_Maya)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Maya Python 3.7 (ErBaDao_Tool_Maya)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>
