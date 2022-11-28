@@ -814,6 +814,7 @@ class EbdToolsMaya(MayaQWidgetBaseMixin, QtWidgets.QMainWindow):
         Format = self.widget.formatComboBox.currentText()
         texModel = self.widget.texModelComboBox.currentText()
         matModel = self.widget.matModelComboBox.currentText()
+        print(matModel)
         displacementIsCheck = self.widget.displacementCheck.isChecked()
         udimIsCheck = self.widget.udimCheck.isChecked()
         opacityIsCheck = self.widget.opacityCheck.isChecked()
@@ -900,13 +901,13 @@ class EbdToolsMaya(MayaQWidgetBaseMixin, QtWidgets.QMainWindow):
             cmds.setAttr(BumpTxName + '.colorSpace', 'Raw', type='string')
             if udimIsCheck:
                 cmds.setAttr(BumpTxName + '.uvTilingMode', 3)
-        if matModel == "RsMaterial":
+        if matModel == "usdPreviewSurface":
             cmds.shadingNode('file', asTexture=True, isColorManaged=True, name=BumpTxName, )
             cmds.setAttr(BumpTxName + '.fileTextureName', fileTexPath + '/' + BumpTxName + udimNum + Format,
                          type="string")
             cmds.setAttr(BumpTxName + '.ignoreColorSpaceFileRules', 1)
             cmds.setAttr(BumpTxName + '.colorSpace', 'Raw', type='string')
-        # #
+
         # 创建 opacity
         if opacityIsCheck :
             cmds.shadingNode('file', asTexture=True, isColorManaged=True, name=OpacityName, )
@@ -975,22 +976,42 @@ class EbdToolsMaya(MayaQWidgetBaseMixin, QtWidgets.QMainWindow):
 
 
         # 链接file到shader
-        cmds.connectAttr(BaseColorName + '.outColor', shaderName + '.diffuse_color')
-        cmds.connectAttr(BumpTxName + '.outColor', BumpName + '.input')
-        cmds.connectAttr(BumpName + '.out', shaderName + '.bump_input')
+        if matModel == "usdPreviewSurface":
+            cmds.connectAttr(BaseColorName + '.outColor', shaderName + '.diffuseColor')
+            cmds.connectAttr(BumpTxName + '.outColor', shaderName + '.normal')
 
-        if opacityIsCheck:
-            cmds.connectAttr(OpacityName + '.outColor', shaderName + '.opacity_color')
-        if emissionIsCheck:
-            cmds.connectAttr(EmissionName + '.outColor', shaderName + '.emission_color')
-        if displacementIsCheck:
-            cmds.connectAttr(DisplacementName+ '.outColor', DisplacementNode + '.texMap')
-        if texModel == 'PBR_ARMS':
-            cmds.connectAttr(ARMSName + '.outColorG', shaderName + '.refl_roughness')
-            cmds.connectAttr(ARMSName + '.outColorB', shaderName + '.refl_metalness')
-        if texModel == 'PBR_MetallRough':
-            cmds.connectAttr(RoughnessName + '.outAlpha', shaderName + '.refl_roughness')
-            cmds.connectAttr(MetallicName + '.outAlpha', shaderName + '.refl_metalness')
+            if opacityIsCheck:
+                cmds.connectAttr(OpacityName + '.outAlpha', shaderName + '.opacity')
+            if emissionIsCheck:
+                cmds.connectAttr(EmissionName + '.outColor', shaderName + '.emissiveColor')
+            if displacementIsCheck:
+                cmds.connectAttr(DisplacementName+ '.outColor', DisplacementNode + '.texMap')
+            if texModel == 'PBR_ARMS':
+                cmds.connectAttr(ARMSName + '.outColorG', shaderName + '.roughness')
+                cmds.connectAttr(ARMSName + '.outColorB', shaderName + '.metallic')
+            if texModel == 'PBR_MetallRough':
+                cmds.connectAttr(RoughnessName + '.outAlpha', shaderName + '.roughness')
+                cmds.connectAttr(MetallicName + '.outAlpha', shaderName + '.metallic')
+        else:
+            pass
+        if matModel == "RsMaterial":
+
+            cmds.connectAttr(BaseColorName + '.outColor', shaderName + '.diffuse_color')
+            cmds.connectAttr(BumpTxName + '.outColor', BumpName + '.input')
+            cmds.connectAttr(BumpName + '.out', shaderName + '.bump_input')
+
+            if opacityIsCheck:
+                cmds.connectAttr(OpacityName + '.outColor', shaderName + '.opacity_color')
+            if emissionIsCheck:
+                cmds.connectAttr(EmissionName + '.outColor', shaderName + '.emission_color')
+            if displacementIsCheck:
+                cmds.connectAttr(DisplacementName+ '.outColor', DisplacementNode + '.texMap')
+            if texModel == 'PBR_ARMS':
+                cmds.connectAttr(ARMSName + '.outColorG', shaderName + '.refl_roughness')
+                cmds.connectAttr(ARMSName + '.outColorB', shaderName + '.refl_metalness')
+            if texModel == 'PBR_MetallRough':
+                cmds.connectAttr(RoughnessName + '.outAlpha', shaderName + '.refl_roughness')
+                cmds.connectAttr(MetallicName + '.outAlpha', shaderName + '.refl_metalness')
 
         # 链接shader到着色组上
         cmds.connectAttr(shaderName + '.outColor', shaderName + 'SG.surfaceShader')
@@ -1006,7 +1027,7 @@ class EbdToolsMaya(MayaQWidgetBaseMixin, QtWidgets.QMainWindow):
         cmds.select(sele)
         cmds.sets(forceElement=shaderName + 'SG')
 
-        '''
+
 
     # Ao/roughness/matellic/Opacity 通道拆分hebing
     def MergeRGBA(self):
