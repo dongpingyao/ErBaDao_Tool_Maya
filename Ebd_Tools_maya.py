@@ -359,7 +359,7 @@ class EbdToolsMaya(MayaQWidgetBaseMixin, QtWidgets.QMainWindow):
     # 冻结位移数据并归世界中心
     def autoPlacePivot(self):
         sele = cmds.ls(sl=1)
-        if len(sele) != 0:
+        if len(sele) != 0 and self.widget.Every_checkBox.isChecked() == 0:
             cmds.xform(sele, cp=1)
             bbox = cmds.exactWorldBoundingBox()
             bottom = [(bbox[0] + bbox[3]) / 2, bbox[1], (bbox[2] + bbox[5]) / 2]
@@ -367,6 +367,18 @@ class EbdToolsMaya(MayaQWidgetBaseMixin, QtWidgets.QMainWindow):
             cmds.move(0, 0, 0, sele, rpr=1)
             if self.widget.Freeze_checkBox.isChecked():
                 cmds.makeIdentity(sele, apply=1, t=1, r=1, s=1, n=0)
+            cmds.select(sele)
+
+        elif len(sele) != 0 and self.widget.Every_checkBox.isChecked():
+            for i in sele:
+                cmds.xform(i, cp=1)
+                bbox = cmds.exactWorldBoundingBox(i)
+                bottom = [(bbox[0] + bbox[3]) / 2, bbox[1], (bbox[2] + bbox[5]) / 2]
+                cmds.xform(i, piv=bottom, ws=1)
+            cmds.move(0, 0, 0, sele, rpr=1)
+            if self.widget.Freeze_checkBox.isChecked():
+                cmds.makeIdentity(sele, apply=1, t=1, r=1, s=1, n=0)
+            cmds.select(sele)
 
     # Texture模块
 
