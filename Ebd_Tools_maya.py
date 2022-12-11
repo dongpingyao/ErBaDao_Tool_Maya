@@ -1598,8 +1598,8 @@ class EbdToolsMaya(MayaQWidgetBaseMixin, QtWidgets.QMainWindow):
             zip.extractall(scriptPath + "ebdTemp")
             zip.close()
 
-            if os.path.exists(scriptPath + "ebdTemp/Ebd_Tools_Maya-main"):
-                os.rename(scriptPath + "ebdTemp/Ebd_Tools_Maya-main",scriptPath + "ebdTemp/ErBaDao_Tool_Maya")
+            if os.path.exists(scriptPath + "ebdTemp/ErBaDao_Tool_Maya-main"):
+                os.rename(scriptPath + "ebdTemp/ErBaDao_Tool_Maya-main",scriptPath + "ebdTemp/ErBaDao_Tool_Maya")
 
             for root, dirs, files in os.walk(scriptPath + "ebdTemp" + r"/ErBaDao_Tool_Maya"):
                 for file in files:
