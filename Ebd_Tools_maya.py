@@ -37,12 +37,15 @@ import cv2CvtFormat
 import cv2SplitAndMergeChanel as cv2ARMS
 
 #判断python版本 根据版本选择导入的库
-if sys.version_info[0] == 2:
-    import python2.requests as requests
-elif sys.version_info[0] == 3:
-    import python3.requests as requests
-else:
-    pass
+
+for i in sys.path:
+    if os.path.exists(i + r"/ErBaDao_Tool_Maya") and sys.version_info[0] == 2:
+        sys.path.append(i + r"/ErBaDao_Tool_Maya/Lib/site_packages/python2")
+    if os.path.exists(i + r"/ErBaDao_Tool_Maya") and sys.version_info[0] == 3:
+        sys.path.append(i + r"/ErBaDao_Tool_Maya/Lib/site_packages/python3")
+    else:
+        pass
+import requests
 
 
 class EbdToolsMaya(MayaQWidgetBaseMixin, QtWidgets.QMainWindow):
