@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>384</width>
-    <height>487</height>
+    <height>484</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -64,7 +64,7 @@
               <x>0</x>
               <y>0</y>
               <width>389</width>
-              <height>248</height>
+              <height>119</height>
              </rect>
             </property>
             <attribute name="label">
@@ -305,7 +305,7 @@
               <x>0</x>
               <y>0</y>
               <width>340</width>
-              <height>265</height>
+              <height>262</height>
              </rect>
             </property>
             <attribute name="label">
@@ -2319,7 +2319,7 @@ p, li { white-space: pre-wrap; }
           </font>
          </property>
          <property name="text">
-          <string>BetaV22.08.08</string>
+          <string>BetaV22.12.10</string>
          </property>
         </widget>
        </item>
@@ -2338,6 +2338,12 @@ p, li { white-space: pre-wrap; }
        </item>
        <item>
         <widget class="QPushButton" name="UpadateButton">
+         <property name="maximumSize">
+          <size>
+           <width>40</width>
+           <height>16777215</height>
+          </size>
+         </property>
          <property name="toolTip">
           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;点击 会更新到最新版本&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
@@ -2346,6 +2352,31 @@ p, li { white-space: pre-wrap; }
          </property>
          <property name="text">
           <string>更新</string>
+         </property>
+         <property name="autoDefault">
+          <bool>false</bool>
+         </property>
+         <property name="default">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="CheckUpadateButton">
+         <property name="maximumSize">
+          <size>
+           <width>60</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;点击 会更新到最新版本&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(0, 101, 99);</string>
+         </property>
+         <property name="text">
+          <string>检查更新</string>
          </property>
          <property name="autoDefault">
           <bool>false</bool>

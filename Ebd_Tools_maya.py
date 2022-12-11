@@ -36,6 +36,14 @@ import wget
 import cv2CvtFormat
 import cv2SplitAndMergeChanel as cv2ARMS
 
+#判断python版本 根据版本选择导入的库
+if sys.version_info[0] == 2:
+    import python2.requests as requests
+elif sys.version_info[0] == 3:
+    import python3.requests as requests
+else:
+    pass
+
 
 class EbdToolsMaya(MayaQWidgetBaseMixin, QtWidgets.QMainWindow):
     def __init__(self, *args, **kwargs):
@@ -88,6 +96,7 @@ class EbdToolsMaya(MayaQWidgetBaseMixin, QtWidgets.QMainWindow):
 
 
         self.widget.UpadateButton.clicked.connect(self.Upadate)
+        self.widget.CheckUpadateButton.clicked.connect(self.CheckUpadate)
         self.widget.GoHomeButton.clicked.connect(self.GoHome)
 
 
@@ -1541,19 +1550,26 @@ class EbdToolsMaya(MayaQWidgetBaseMixin, QtWidgets.QMainWindow):
 
 
 
+    #检查更新
+    def CheckUpadate(self):
+        response = requests.get("https://api.github.com/repos/dongpingyao/ErBaDao_Tool_Maya/releases")
+        NowVesion = response.json()[0]["name"]
+        NowVesionBody = response.json()[0]["body"]
+        print(NowVesion + NowVesionBody)
+        self.widget.EbdLog_Browser.append(NowVesion)
+        self.widget.EbdLog_Browser.ensureCursorVisible()
+        self.widget.EbdLog_Browser.append(NowVesionBody)
+
 
     # 更新控件
     def Upadate(self):
         for i in sys.path:
             if "ErBaDao_Tool_Maya" in i:
                 scriptPath = i.split(r'ErBaDao_Tool_Maya')[0]
-        try:
-            url = "https://codeload.github.com/dongpingyao/Ebd_Tools_Maya/zip/refs/heads/main"
-        except:
-            url = "http://182.92.66.60:45015/down/aV9E2zTCj2oS?fname=/ErBaDao_Tool_Maya.zip"
+        url = "https://codeload.github.com/dongpingyao/ErBaDao_Tool_Maya/zip/refs/heads/main"
         filePath = scriptPath + "ebdTemp"
         fileName = filePath + r'/ErBaDao_Tool_Maya.zip'
-        fileName2 = filePath + r'/Ebd_Tools_Maya-main.zip'
+        fileName2 = filePath + r'/ErBaDao_Tool_Maya-main.zip'
         tarfile = scriptPath
         if os.path.exists(filePath):
             shutil.rmtree(filePath)
