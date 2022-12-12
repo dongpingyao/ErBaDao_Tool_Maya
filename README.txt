@@ -1,8 +1,10 @@
-1.将解压后 Ebd_Tools_Maya-main 的文件夹重命名为 ErBaDao_Tool_Maya
+1.将解压后 ErBaDao_Tool_Maya-main 的文件夹重命名为 ErBaDao_Tool_Maya
 2.将ErBaDao_Tool_Maya 文件夹 复制到 maya 相关的scripts等脚本文件夹
 3.将Launcher.py 文件在maya的脚本编辑器中打开 运行即可
 
-Ebd_Tools_maya_BetaV22.08.14 更新 
+BetaV22.12.10 更新
+1.texture模块下 材质球自动连接功能里 添加了 快速链接usdpreviewSurface材质球的选项
+2.添加了检查版本更新的功能
 
 更新22.08.14
 1,将下载源迁移到了githup,虽然下载速度受限,但省去了服务器的费用
