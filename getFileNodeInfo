@@ -1,0 +1,312 @@
+# -*- coding: utf_8 -*- 
+
+__author__ = "Huangfu Zhenping (1019622764@qq.com)"
+__version__ = "$Revision: 1.1"
+__date__ = "$Date: 2016/3/30"
+__copyright__ = "Copyright (c) 2016 Huangfu Zhenping"
+__license__ = "Python"
+
+__metaclass__ = type
+
+from pymel.all import *
+import os, subprocess
+import glob
+import re
+
+
+class NewFileTexManager(object):
+    fileNodeList = {
+        # '渲染器名' : {
+        #    '节点1': ('属性名1','属性名2'……),
+        #    '节点2': ('属性名1','属性名2'……),
+        # }
+        'Maya': {
+            'file': ['fileTextureName'],
+            'psdFileTex': ['fileTextureName'],
+        },
+        'mentalray': {
+            'mentalrayTexture': ['fileTextureName'],
+        },
+        'Redshift': {
+            'RedshiftNormalMap': ['tex0'],
+            'RedshiftEnvironment': ['tex0'],
+            'RedshiftCameraMap': ['tex0'],
+            'RedshiftLightGobo': ['tex0'],
+            'RedshiftSprite': ['tex0'],
+            # 'RedshiftDomeLight'     : ['tex0','tex1'],
+        },
+    }
+
+    def getSpecial(self, render):
+        '''指定1个渲染器，按fileNodeList中的定义读取文件节点信息.
+        必须确保render在fileNodeList中存在'''
+
+        files = []
+
+        for nodeName, attrs in self.fileNodeList[render].items():
+            nodes = ls(typ=nodeName)
+            for eachNode in nodes:
+                for eachAttr in attrs:
+                    fileText = getattr(eachNode, eachAttr).get()
+                    if fileText:
+                        fileText = fileText.replace('\\', '/')
+                    files.append(('%s.%s' % (eachNode, eachAttr), fileText))
+        return files
+
+    def parse(self, render=''):
+        '''
+        将(node.attr,texture path)列表写入self.filterfiles的value，key是文件路径。
+        不指定渲染器的话查找所有渲染器类型的文件节点. 如果节点没有指定路径文件会返回None
+        '''
+
+        self.filterfiles = {}  # {path:[[exists],[unexists]]}
+        self.files = []  # [(node.attr,texture path)]
+        self.emptyFiles = []
+
+        if render:
+            try:
+                self.files = self.getSpecial(render)
+            except:
+                pass
+        else:
+            for eachRender in self.fileNodeList.keys():
+                self.files.extend(self.getSpecial(eachRender))
+
+        for index, (attr, pathfile) in enumerate(self.files):  # index,(attr,pathfile) = 30,self.files[-1]
+            if not pathfile:
+                self.emptyFiles.append(index)
+                continue
+            path, filename = os.path.split(pathfile)
+            if not self.filterfiles.has_key(path):
+                if os.path.exists(pathfile) and os.path.isfile(
+                        pathfile):  # os.path.exists('Z:/P20_CQ/') #help(os.path.exists)
+                    # print pathfile
+                    self.filterfiles[path] = [[index], []]
+                else:
+                    self.filterfiles[path] = [[], [index]]
+            else:
+                if os.path.exists(pathfile) and os.path.isfile(pathfile):
+                    self.filterfiles[path][0].append(index)
+                else:
+                    self.filterfiles[path][1].append(index)
+
+        return tuple(self.files)
+
+    def selectList(self, mode, indexList, checkExist=None, checkNotExist=None):  # indexList=eachV[1]
+        '''
+        mode True     选中模式
+             False    取消选中模式
+        indexList 用于索引self.files的序列编号，如[2,5,8,10]
+        checkExist,checkNotExist 应该关闭或隐藏的checkBox
+        '''
+        # print('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
+        # print(indexList)
+        if mode:
+            for eachIndex in indexList: select(PyNode(self.files[eachIndex][0]).node(), add=1)
+        else:
+            for eachIndex in indexList: select(PyNode(self.files[eachIndex][0]).node(), deselect=1)
+        for each in (checkExist, checkNotExist):
+            if each:
+                if mode:
+                    each.setValue(1)
+                    each.setVisible(0)
+                else:
+                    each.setValue(0)
+                    each.setVisible(1)
+
+    def refreshLis(self, columnObj):
+        # columnObj= PyUI('newTexMgr|newTexMgrCol|newTexMgrForm|fileInfoScroll|columnLayout395')
+        select(clear=True)
+        self.parse()
+        checkCol = columnObj.name() + '|AnalysisCheckerColumn'
+        if ColumnLayout.exists(checkCol):
+            deleteUI(checkCol)
+        if not self.files:
+            Text('NewEmptyAnalysisText').setLabel('No file textures found!')
+        else:
+            Text('NewEmptyAnalysisText').setLabel('Analysis:')
+            setParent(columnObj)
+            columnLayout('AnalysisCheckerColumn')
+            Totalresults = 'Total %s file textures point to %s (different) path(s) : ' % (
+            len(self.files), len(self.filterfiles.keys()))
+            text(l=Totalresults)
+            text(l='', h=10)
+            if len(self.emptyFiles):
+                checkBox(l='%s texture(s) NOT specified. So they are NOT exist(s).' % len(self.emptyFiles), al='left',
+                         onc=lambda *args: self.selectList(True,self.emptyFiles) ,
+                         ofc=lambda *args: self.selectList(False,self.emptyFiles)
+                         )
+
+            for eachK, eachV in self.filterfiles.items():  # eachK,eachV = self.filterfiles.items()[0]
+                unExistsNum = len(eachV[1])
+                ExistsNum = len(eachV[0])
+                checkMain = checkBox(l='%s texture(s) point to "%s"' % (unExistsNum + ExistsNum, eachK),
+                                     al='left')  # Main = checkBox(l='vvv')
+                with columnLayout(adj=1, cat=('left', 30)):
+                    checkExist = checkBox(l='%s of them exist(s).' % (ExistsNum), al='left',
+                                          onc=lambda *args: self.selectList(True, eachV[0]),
+                                          ofc=lambda *args: self.selectList(False, eachV[0])
+                                          )
+                    checkNotExist = checkBox(l='%s of them NOT exist(s).' % (unExistsNum), al='left',
+                                             onc=lambda *args: self.selectList(True, eachV[1]),
+                                             ofc=lambda *args: self.selectList(False,eachV[1])
+                                             )
+                # print('!!!!self.selectList(True,%s,CheckBox("%s"),CheckBox("%s"))'%(eachV[0]+eachV[1],checkExist,checkNotExist))
+                checkMain.onCommand(lambda *args: self.selectList(True, eachV[0]+eachV[1], CheckBox(checkExist),CheckBox(checkNotExist)))
+                checkMain.offCommand(lambda *args: self.selectList(False, eachV[0] + eachV[1], CheckBox(checkExist),CheckBox(checkNotExist)))
+                # dir(Main)
+
+    def usePath(self, mode):
+        '''
+        mode 0 Copy
+             1 Move
+             2 Set 
+        '''
+        newPath = TextFieldButtonGrp('NewTargetDirectoryField').getText()
+        if not os.path.isdir(newPath):
+            confirmDialog(title='Error', message='%s \n\nis NOT exist! Please use a correct dirctory.' % newPath)
+            return
+        Num = 0
+        for eachSelNode in ls(sl=1):  # eachSelNode=ls(sl=1)[0] self.files
+            nodeTypeName = eachSelNode.type()
+            for eachDic in self.fileNodeList.values():  # eachDic=self.fileNodeList.values()[2] nodeTypeName='mentalrayTexture'
+                if eachDic.has_key(nodeTypeName):
+                    for eachAttr in eachDic[nodeTypeName]:  # eachAttr=eachDic[nodeTypeName][0]
+                        nodetext = getattr(eachSelNode, eachAttr).get()
+                        if not mode == 2:
+                            if mode == 0:
+                                new_nodetext = ''
+                                if '<UDIM>' in nodetext:
+                                    new_nodetext = nodetext.replace('<UDIM>', '*')
+                                else:
+                                    frame_num = re.findall(r"_\d{4}", nodetext)
+                                    if frame_num:
+                                        new_nodetext = nodetext.replace(frame_num[0], '*')
+
+                                for text_path in glob.glob(new_nodetext):
+                                    subprocess.Popen(
+                                        'copy %s %s' % (text_path.replace('/', '\\'), newPath.replace('/', '\\')),
+                                        shell=True)
+                                    print('copy %s to %s' % (text_path, newPath))
+
+                            if os.path.exists(nodetext) and os.path.isfile(nodetext):
+                                if mode == 0:
+                                    # dir(os.path.sys)
+                                    subprocess.Popen(
+                                        'copy %s %s' % (nodetext.replace('/', '\\'), newPath.replace('/', '\\')),
+                                        shell=True)
+                                    print('copy %s to %s' % (nodetext, newPath))
+                                else:
+                                    subprocess.Popen(
+                                        'move %s %s' % (nodetext.replace('/', '\\'), newPath.replace('/', '\\')),
+                                        shell=True)
+                                    print('move %s to %s' % (nodetext.replace('/', '\\'), newPath.replace('/', '\\')))
+                                Num += 1
+                            continue
+                        if nodetext:
+                            pathName, fileName = os.path.split(nodetext)
+                        else:
+                            pathName, fileName = ['', '']
+                        if CheckBoxGrp('NewReplaceStringChecker').getValue1():
+                            fileName = fileName.replace(TextFieldGrp('NewOldStringField').getText(),
+                                                        TextFieldGrp('NewNewStringField').getText())
+                        newString = os.path.join(newPath, fileName)
+                        print('%s is set path to %s!' % (eachSelNode, newString))
+                        getattr(eachSelNode, eachAttr).set(newString)
+
+        cmd = (mode == 0) and 'copied! ' or 'moved! '
+        if mode != 2:
+            confirmDialog(message='%s files is %s' % (Num, cmd))
+
+    def targetPath(self, *args):
+        folder = TextFieldButtonGrp('NewTargetDirectoryField').getText()
+        if not os.path.isdir(folder):
+            folder = workspace(q=True, directory=True)
+        ret = fileDialog2(cap='Select Folder', okc='Select', ds=2, fm=3, startingDirectory=folder)
+        if ret:
+            TextFieldButtonGrp('NewTargetDirectoryField').setText(ret[0])
+
+    def __init__(self):
+        '''
+        窗口
+        '''
+        self.parse()
+        currentProject = workspace(q=1, rd=1)
+        try:
+            sourceImages = workspace.fileRules["sourceImages"]
+        except KeyError:
+            sourceImages = ''
+        currentSourceImagesDir = os.path.join(currentProject, sourceImages)
+
+        if window('newTexMgr', exists=True):
+            deleteUI('newTexMgr')
+        with window('newTexMgr', title='New Texture Manager Window', w=500, h=300, sizeable=True) as Win:
+            with columnLayout('newTexMgrCol', adjustableColumn=True, rowSpacing=5):
+                with formLayout('newTexMgrForm', nd=100) as formLay:
+                    tipText = text(l="Select files you want to manage. <Multi-Selectable>")
+                    with scrollLayout('fileInfoScroll') as scrollLay:
+                        with columnLayout(cat=['left', 15]) as newAnalysisColumn:
+                            text('NewEmptyAnalysisText', l='Not analysed yet.')
+                    formLayout(formLay, e=1,
+                               af=((tipText, 'left', 0),
+                                   (tipText, 'right', 0),
+                                   (tipText, 'top', 5),
+                                   (tipText, 'bottom', 200),
+                                   (scrollLay, 'bottom', 0),
+                                   (scrollLay, 'left', 0),
+                                   (scrollLay, 'right', 0),
+                                   ),
+                               ac=[(scrollLay, 'top', 5, tipText)]
+                               )
+                targPath = textFieldButtonGrp('NewTargetDirectoryField', label='Target Directory',
+                                              text=currentSourceImagesDir, buttonLabel='Browse...', adj=2,
+                                              cw=((1, 120), (3, 60)), cl3=('right', 'left', 'center'))
+                targPath.buttonCommand(self.targetPath)
+                replaceCheck = checkBoxGrp('NewReplaceStringChecker', ncb=1, l1='Replace String', adj=1, v1=0,
+                                           cat=(1, 'left', 101))
+                oField = textFieldGrp('NewOldStringField', l='Old String', tx='OldString', en=0, cw2=(120, 150),
+                                      cl2=('right', 'left'))  # dir(oField)
+                nField = textFieldGrp('NewNewStringField', l='New String', tx='NewString', en=0, cw2=(120, 150),
+                                      cl2=('right', 'left'))
+                replaceCheck.onCommand1(lambda *args: [each.setEnable(1) for each in [oField, nField]])
+                replaceCheck.offCommand1(lambda *args: [each.setEnable(0) for each in [oField, nField]])
+
+                with formLayout(h=30, numberOfDivisions=100) as btnForm:
+                    copyBtn = button(l='Copy Files', command=lambda *args: self.usePath(0))  # ,en=False)
+                    moveBtn = button(l='Move Files', command=lambda *args: self.usePath(1))  # ,en=False)
+                    setBtn = button(l='Set Path', command=lambda *args: self.usePath(2))
+                    rfrBtn = button(l='Refresh', command=lambda *args: self.refreshLis(newAnalysisColumn))
+                    clsBtn = button(l='Close', command=lambda *args: deleteUI(Win))
+                    btnForm.attachPosition(copyBtn, 'right', 1, 20)
+                    btnForm.attachPosition(moveBtn, 'left', 1, 20)
+                    btnForm.attachPosition(moveBtn, 'right', 1, 40)
+                    btnForm.attachPosition(setBtn, 'left', 1, 40)
+                    btnForm.attachPosition(setBtn, 'right', 1, 60)
+                    btnForm.attachPosition(rfrBtn, 'left', 1, 60)
+                    btnForm.attachPosition(rfrBtn, 'right', 1, 80)
+                    btnForm.attachPosition(clsBtn, 'left', 1, 80)
+                    btnForm.attachForm(copyBtn, 'top', 0)
+                    btnForm.attachForm(copyBtn, 'left', 0)
+                    btnForm.attachForm(copyBtn, 'bottom', 0)
+                    btnForm.attachForm(moveBtn, 'top', 0)
+                    btnForm.attachForm(moveBtn, 'bottom', 0)
+                    btnForm.attachForm(setBtn, 'top', 0)
+                    btnForm.attachForm(setBtn, 'bottom', 0)
+                    btnForm.attachForm(rfrBtn, 'top', 0)
+                    btnForm.attachForm(rfrBtn, 'bottom', 0)
+                    btnForm.attachForm(clsBtn, 'top', 0)
+                    btnForm.attachForm(clsBtn, 'right', 0)
+                    btnForm.attachForm(clsBtn, 'bottom', 0)
+
+        showWindow('newTexMgr')
+        # self.newAnalyseFileTex
+        self.refreshLis(newAnalysisColumn)
+        # print newAnalysisColumn
+
+
+def main():
+    NewFileTexManager()
+# self = NewFileTexManager()
+# self.parse()
+# self.files self.emptyFiles
+# main()
